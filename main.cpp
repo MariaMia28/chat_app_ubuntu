@@ -15,6 +15,13 @@ struct Client {
 
 };
 
+void receiveMessages(int clientSocket) {
+    while (true) {
+        string receivedMessage = receiveMessage(clientSocket);
+        displayMessage("Server", receivedMessage);
+    }
+}
+
 int main(int argc, char* argv[]) {
     if (argc < 2)
     {
@@ -23,7 +30,7 @@ int main(int argc, char* argv[]) {
 
         thread receiveThread(receiveMessages, clientSocket);
 
-        while(true) {
+        while(true) {       
             string message = getMessageFromUser(); //implement it in ui.cpp
             sendMessage(clientSocket, message); //implement in network.cpp
         }
@@ -33,6 +40,9 @@ int main(int argc, char* argv[]) {
 
         while (true)
         {
+            string message = getMessageFromUser();
+            sendMessage(clientSocket, message);
+
             int clientSocket = acceptClientConnection(serverSocket); //implement in network.cpp
             string clientName = getClientConnection(serverSocket);
 
