@@ -3,6 +3,8 @@
 #include <vector>
 #include <thread> 
 
+#include "network.hpp"
+#include "ui.hpp"
 
 using namespace std;
 
