@@ -12,6 +12,35 @@
 
 using namespace std;
 
+int connectToServer(const std::string& serverAddress) {
+    int sock = 0; 
+    struct sockaddr_in serv_addr;
+
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        std::cerr << "Socket creation error" << std::endl;
+        return -1;
+    }
+
+    memset(&serv_addr, '0', sizeof(serv_addr));
+
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(PORT);
+
+    // Convert IPv4 address from text to binary form
+    if(inet_pton(AF_INET, serverAddress.c_str(), &serv_addr.sin_addr) <= 0)  {
+        std::cerr << "Invalid address/ Address not supported" << std::endl;
+        return -1;
+    }
+
+    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+        std::cerr << "Connection Failed" << std::endl;
+        return -1;
+    }
+
+    std::cout << "Connected to server at " << serverAddress << std::endl;
+    return sock;
+}
+
 int createServerSocket(){
     int serverFd;
     struct sockaddr _in serverAddr;
