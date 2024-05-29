@@ -45,8 +45,26 @@ int createServerSocket(){
     cout << "Server listening on port " << PORT << endl;
     return serverFd;
 
-    
-    
+}
+
+int acceptClientConnection(int serverFd) {
+    int newSocket;
+    struct sockaddr _in clientAddr;
+    socklen_t addrLen = sizeof(clientAddr);
+
+    //accepting a new incoming connection
+    if ((newSocket = accept(serverFd, (struct sockaddr *)&clientAddr, &addrLen)) < 0)
+    {
+        perror("accept");
+        exit(EXIT_FAILURE);
+    }
+
+    //getting the client's IP
+    char ipstr[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &(clientAddr.sin_addr), ipstr, INET_ADDRSTRLEN);
+    cout << "New connection from " << ipstr << endl;
+
+    return newSocket;
     
 }
 
