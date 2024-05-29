@@ -27,5 +27,26 @@ int createServerSocket(){
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_addr.s_addr = INADDR_ANY; //listen on all available interfaces
     serverAddr.sin_port = htons(PORT);
+
+    //binding the socket to the specified address and port
+    if (bind(serverFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0)
+    {
+        perror("bind failed");
+        exit(EXIT_FAILURE);
+    }
+
+    //listen for incoming connections
+    if (listen(serverFd, 3) < 0) //allow up to 3 pending connections
+    {
+        perror("listen");
+        exit(EXIT_FAILURE);
+    }
+
+    cout << "Server listening on port " << PORT << endl;
+    return serverFd;
+
+    
+    
+    
 }
 
